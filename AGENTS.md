@@ -20,9 +20,10 @@ Mọi Agent có quyền truy cập shell trên máy chủ Host (macOS) có thể
 
 ### Cách 1: Sử dụng Native SSH (Khuyên dùng - Nhanh nhất)
 Máy Mac đã được cấu hình sẵn alias `devops-lab` và SSH Key riêng biệt tại `~/.ssh/devops/id_ed25519`.
+Đặc biệt, kết nối được cấu hình qua **`ProxyCommand multipass exec devops-lab -- nc 127.0.0.1 22`**, giúp đảm bảo **kết nối bất tử 100% không bao giờ bị đứt dù IP máy ảo có thay đổi hay Mac reboot**.
 
 ```bash
-# Thực thi lệnh từ xa không cần nhập password
+# Thực thi lệnh từ xa không cần nhập password (hoạt động bất kể IP là gì)
 ssh devops-lab "uptime; uname -a"
 
 # Chạy lệnh yêu cầu quyền root
@@ -53,11 +54,11 @@ multipass start devops-lab
 # 3. Tắt máy ảo để giải phóng RAM sau khi hoàn tất bài test nặng
 multipass stop devops-lab
 
-# 4. Kiểm tra IP hiện tại (nếu máy ảo bị restart và đổi IP)
+# 4. Kiểm tra IP hiện tại (nếu cần truy cập HTTP trực tiếp qua IP)
 multipass info devops-lab | grep IPv4
 ```
 
-> **Lưu ý cho Agent nếu IP bị đổi:** Nếu lệnh `ssh devops-lab` báo lỗi timeout do IP thay đổi sau reboot, Agent hãy lấy IP mới bằng lệnh `multipass info devops-lab | grep IPv4` và cập nhật lại trường `HostName` trong file `~/.ssh/config`.
+> **Lưu ý:** SSH `devops-lab` đã dùng `ProxyCommand` nên không phụ thuộc vào IP. Đồng thời, cổng web `80` của máy ảo đã được ánh xạ tự động qua `LocalForward 8080 127.0.0.1:80` (truy cập tại `http://localhost:8080` trên máy Mac).
 
 ---
 
