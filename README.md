@@ -4,6 +4,13 @@ Bộ tài liệu này được thiết kế dành riêng cho **Middle Backend De
 
 ---
 
+## 📖 Bắt Đầu Tại Đây Nếu Chưa Rõ Thuật Ngữ
+
+Nếu bạn chưa quen với các khái niệm của hệ thống, mạng hoặc hạ tầng (như *Kernel, File Descriptor, Subnet, CIDR, Reverse Proxy, Pod, GitOps...*), hãy đọc tài liệu này trước:
+👉 **[docs/00-thuat-ngu-can-biet.md](file:///Users/nam088/code/nam088/devop/docs/00-thuat-ngu-can-biet.md)**: Từ điển thuật ngữ DevOps giải thích bằng ẩn dụ đời thực và góc nhìn quen thuộc của Backend Developer.
+
+---
+
 ## 🗺️ Ma Trận Kỹ Năng & Cấu Trúc Tài Liệu
 
 ```mermaid
