@@ -1,0 +1,17 @@
+{
+  "name": "production-nodejs-backend",
+  "version": "1.0.0",
+  "description": "Production-grade Node.js Backend for DevOps Lab Phase 2",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/app.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": true
+}

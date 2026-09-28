@@ -1,0 +1,19 @@
+[Unit]
+Description=My Backend API Service (Phase 1 Lab)
+After=network.target
+
+[Service]
+Type=simple
+User=appuser
+Group=appuser
+WorkingDirectory=/opt/my-backend
+ExecStart=/usr/bin/python3 /opt/my-backend/server.py
+Restart=always
+RestartSec=3s
+
+# Giới hạn File Descriptors chuẩn production
+LimitNOFILE=65535
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target

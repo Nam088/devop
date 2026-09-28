@@ -1,0 +1,68 @@
+name: Phase 2 CI - Node.js Backend & Docker
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'labs/02-docker-cicd/**'
+      - '.github/workflows/phase-2-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'labs/02-docker-cicd/**'
+      - '.github/workflows/phase-2-ci.yml'
+
+jobs:
+  unit-test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/02-docker-cicd/nodejs-backend
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: labs/02-docker-cicd/nodejs-backend/package.json
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm test
+
+  docker-build-scan:
+    name: Build & Security Scan
+    needs: unit-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image Locally
+        uses: docker/build-push-action@v6
+        with:
+          context: labs/02-docker-cicd/nodejs-backend
+          file: labs/02-docker-cicd/nodejs-backend/Dockerfile
+          load: true
+          tags: nodejs-backend:ci-scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Quét lỗ hổng bảo mật với Aqua Trivy
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: nodejs-backend:ci-scan
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
